@@ -1,15 +1,15 @@
 import Navbar from "@/components/Navbar";
-import { View } from "@/components/Themed";
+import { View, Text } from "@/components/Themed";
 import { Link } from "expo-router";
 import { StyleSheet } from "react-native";
 
 export default function Home() {
   return (
-    <View style={{ flex: 1, flexDirection: "column" }}>
+    <View style={styles.body}>
       <Navbar />
       <View style={styles.container}>
-        <Link href="/announcements" style={{ color: "#000" }}>
-          Home Screen
+        <Link href="/announcements">
+          <Text>Home Screen</Text>
         </Link>
       </View>
     </View>
@@ -17,14 +17,15 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
+  body: {
+    flex: 1,
+    flexDirection: "column",
+  },
   container: {
     flex: 10,
+    fontSize: 18,
     alignItems: "center",
     justifyContent: "flex-start",
     flexDirection: "column",
-  },
-  image: {
-    flex: 1,
-    width: "100%",
   },
 });
