@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     width: "100%",
     height: "100%",
-    marginBottom: 10,
+    marginBottom: 20,
     backgroundColor: "#495668",
     paddingTop: StatusBar.currentHeight,
   },
