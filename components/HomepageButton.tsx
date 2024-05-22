@@ -79,8 +79,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   pressable: {
-    width: "100%",
-    flex: 1,
     alignItems: "center",
     alignSelf: "stretch",
     justifyContent: "flex-start",
