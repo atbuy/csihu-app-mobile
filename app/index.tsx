@@ -3,6 +3,7 @@ import HomepageButton from "@/components/HomepageButton";
 import { View } from "@/components/Themed";
 import { StyleSheet } from "react-native";
 import { faBullhorn } from "@fortawesome/free-solid-svg-icons/faBullhorn";
+import { faList } from "@fortawesome/free-solid-svg-icons/faList";
 
 export default function Home() {
   return (
@@ -13,6 +14,11 @@ export default function Home() {
           icon={faBullhorn}
           to="/announcements"
           label="Ανακοινώσεις"
+        />
+        <HomepageButton
+          icon={faList}
+          to="/useful"
+          label="Χρήσιμα"
         />
       </View>
     </View>

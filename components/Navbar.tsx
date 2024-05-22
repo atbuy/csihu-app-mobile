@@ -3,31 +3,32 @@ import { View, Text } from "./Themed";
 import Colors from "@/constants/Colors";
 
 function LogoTitle() {
-  return (
-    <Image
-      style={styles.image}
-      resizeMode="contain"
-      source={require("@/assets/images/duth_dark.png")}
-    />
-  );
+  const theme = useColorScheme() ?? "light";
+
+  let imageURI = require("@/assets/images/duth_dark.png");
+
+  if (theme == "light") {
+    imageURI = require("@/assets/images/duth_light.png");
+  }
+
+  return <Image style={styles.image} resizeMode="contain" source={imageURI} />;
 }
 
 export default function Navbar() {
   const theme = useColorScheme() ?? "light";
 
   let shadowProp = styles.boxShadowDark;
-  let logoTextColor = { color: Colors.light.text };
+  let logoTextColor = { color: Colors.dark.text };
+  let navbarColor = { backgroundColor: Colors.dark.navbarBackground };
 
   if (theme == "light") {
     shadowProp = styles.boxShadowLight;
-  }
-
-  if (theme == "dark") {
-    logoTextColor = { color: Colors.dark.text };
+    logoTextColor = { color: Colors.light.text };
+    navbarColor = { backgroundColor: Colors.light.navbarBackground };
   }
 
   return (
-    <View style={[styles.navbar, shadowProp]}>
+    <View style={[styles.navbar, shadowProp, navbarColor]}>
       <LogoTitle />
       <Text style={[styles.logoText, logoTextColor]}>CSDUTH Touch</Text>
     </View>
@@ -43,12 +44,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     marginBottom: 20,
-    backgroundColor: "#495668",
     paddingTop: StatusBar.currentHeight,
   },
   logoText: {
     fontWeight: "bold",
-    fontSize: 19,
+    fontSize: 20,
   },
   boxShadowLight: {
     shadowColor: "#313131",

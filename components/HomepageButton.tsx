@@ -82,9 +82,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "stretch",
     justifyContent: "flex-start",
+    marginVertical: 20,
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 20,
     paddingLeft: 10,
   },
   icon: {
