@@ -9,6 +9,7 @@ export default {
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorLight,
     navbarBackground: "#ffffff",
+    cardColor: "#ffffff",
   },
   dark: {
     text: "#fff",
@@ -17,5 +18,6 @@ export default {
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorDark,
     navbarBackground: "#495668",
+    cardColor: "#3D5475",
   },
 };
