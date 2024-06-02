@@ -25,9 +25,21 @@ export default function Announcements() {
       // Check if data is already cached
       const cached = await AsyncStorage.getItem("announcementData");
       if (cached !== null) {
-        setData(JSON.parse(cached));
-        setLoading(false);
-        return;
+        // Verify that the cache was loaded in the last 10 minutes
+        let lastCache = await AsyncStorage.getItem("lastCache");
+        if (lastCache === null) {
+          lastCache = Date();
+        }
+
+        const currentTimestamp = Date.now();
+        const pastTimestamp = Date.parse(lastCache);
+        const minutes10 = 60 * 10;
+
+        if (pastTimestamp + minutes10 >= currentTimestamp) {
+          setData(JSON.parse(cached));
+          setLoading(false);
+          return;
+        }
       }
 
       const URL = `${process.env.API_BASE_URL}/csihu/notifications`;
@@ -36,6 +48,7 @@ export default function Announcements() {
       const json = await response.json();
       setData(json.data);
       await AsyncStorage.setItem("announcementData", JSON.stringify(json.data));
+      await AsyncStorage.setItem("lastCache", Date());
     } catch (error) {
       console.log(error);
     } finally {
