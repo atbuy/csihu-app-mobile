@@ -12,6 +12,7 @@ type AnnouncementProps = {
   date: string;
   author: string;
   pressable?: boolean;
+  fullscreen?: boolean;
 };
 
 export default function Announcement(props: AnnouncementProps) {
@@ -22,6 +23,18 @@ export default function Announcement(props: AnnouncementProps) {
     pressable = true;
   } else {
     pressable = props.pressable;
+  }
+
+  let fullscreen: boolean;
+  if (props.fullscreen === undefined) {
+    fullscreen = false;
+  } else {
+    fullscreen = props.fullscreen;
+  }
+
+  let fullscreenClass = {};
+  if (fullscreen) {
+    fullscreenClass = { flex: 1, height: "100%" };
   }
 
   // Assume dark theme
@@ -47,7 +60,14 @@ export default function Announcement(props: AnnouncementProps) {
     if (pressable === true) {
       return (
         <Pressable onPress={() => redirect(props.id)}>
-          <View style={[styles.container, cardBackgroundColor, shadow]}>
+          <View
+            style={[
+              styles.container,
+              cardBackgroundColor,
+              shadow,
+              fullscreenClass,
+            ]}
+          >
             <Text style={[styles.title, titleColor]}>{props.title}</Text>
             <Text style={[styles.description, descriptionColor]}>
               {props.description}
@@ -69,7 +89,14 @@ export default function Announcement(props: AnnouncementProps) {
 
     return (
       <View>
-        <View style={[styles.container, cardBackgroundColor, shadow]}>
+        <View
+          style={[
+            styles.container,
+            cardBackgroundColor,
+            shadow,
+            fullscreenClass,
+          ]}
+        >
           <Text style={[styles.title, titleColor]}>{props.title}</Text>
           <Text style={[styles.description, descriptionColor]}>
             {props.description}

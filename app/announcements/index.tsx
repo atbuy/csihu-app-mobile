@@ -1,12 +1,8 @@
 import Announcement from "@/components/Announcement";
 import Navbar from "@/components/Navbar";
 import { View } from "@/components/Themed";
-import Constants from "expo-constants";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
-import { AppConfig } from "../../app.config";
-
-const { API_BASE_URL } = Constants.manifest?.extra as AppConfig;
 
 type Announcement = {
   pk: string;
@@ -14,6 +10,8 @@ type Announcement = {
   title: string;
   description: string;
   link: string;
+  date: string;
+  author: string;
 };
 
 export default function Announcements() {
@@ -23,7 +21,9 @@ export default function Announcements() {
   // Query API to get all announcements
   const getAnnouncements = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/notifications`);
+      const URL = `${process.env.API_BASE_URL}/csihu/notifications`;
+
+      const response = await fetch(URL);
       const json = await response.json();
       setData(json.data);
     } catch (error) {
@@ -31,6 +31,17 @@ export default function Announcements() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const cropText = (text: string) => {
+    const STRING_LENGTH = 137;
+    const cleanText = text
+      .replaceAll("\n", "")
+      .replaceAll(".", ". ")
+      .replace(",", ", ")
+      .replaceAll(":", ": ")
+      .replaceAll(": //", "://");
+    return cleanText.substring(0, STRING_LENGTH) + "...";
   };
 
   useEffect(() => {
@@ -47,11 +58,12 @@ export default function Announcements() {
           <ScrollView style={styles.announcementContainer}>
             {data.map((obj) => (
               <Announcement
+                key={obj.id}
                 id={obj.id}
                 title={obj.title}
-                description={obj.description}
-                date={"22 Απρ 2024 11:59"}
-                author={"Δρ. Ελένη Βρογχίδου"}
+                description={cropText(obj.description)}
+                date={obj.date}
+                author={obj.author}
               />
             ))}
           </ScrollView>
