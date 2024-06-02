@@ -1,40 +1,69 @@
 import Navbar from "@/components/Navbar";
 import { View } from "@/components/Themed";
 import UsefulButton from "@/components/UsefulButton";
-import { ScrollView, StyleSheet } from "react-native";
+import { Dimensions, ScrollView, StyleSheet } from "react-native";
+
+import { faTable } from "@fortawesome/free-solid-svg-icons/faTable";
+import { faChalkboardUser } from "@fortawesome/free-solid-svg-icons/faChalkboardUser";
+
+const rows = 3;
+const cols = 2;
+const marginHorizontal = 4;
+const marginVertical = 4;
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+const width = windowWidth / cols - marginHorizontal * (cols + 1);
+const height = windowHeight / rows - marginVertical * (rows + 1);
 
 export default function Useful() {
   return (
     <View style={styles.body}>
       <Navbar />
       <View style={styles.container}>
-        <ScrollView style={styles.buttonContainer}>
-          <View style={styles.button}>
-            <UsefulButton
-              to="https://moodle.cs.ihu.gr/moodle/"
-              label="Moodle"
-            />
-          </View>
-          <View style={styles.button}>
-            <UsefulButton to="https://cs.duth.gr/" label="CSDUTH" />
-          </View>
-          <View style={styles.button}>
-            <UsefulButton to="https://uniportal.ihu.gr/" label="Uniportal" />
-          </View>
-          <View style={styles.button}>
-            <UsefulButton to="https://courses.cs.ihu.gr/" label="Courses" />
-          </View>
-          <View style={styles.button}>
-            <UsefulButton
-              to="https://cs.duth.gr/cs_hosting/attachments/webpages/el_timetable.pdf"
-              label="Πρόγραμμα"
-            />
-          </View>
-          <View style={styles.button}>
-            <UsefulButton
-              to="https://cs.duth.gr/faculty.xhtml"
-              label="Προσωπικό"
-            />
+        <ScrollView style={styles.scrollContainer}>
+          <View style={styles.sectionContainer}>
+            <View style={styles.button}>
+              <UsefulButton
+                to="https://moodle.cs.ihu.gr/moodle/"
+                label="Moodle"
+                image={require("@/assets/images/moodle.png")}
+              />
+            </View>
+            <View style={styles.button}>
+              <UsefulButton
+                to="https://cs.duth.gr/"
+                label="CSDUTH"
+                image={require("@/assets/images/duth_light.png")}
+              />
+            </View>
+            <View style={styles.button}>
+              <UsefulButton
+                to="https://uniportal.ihu.gr/"
+                label="Uniportal"
+                image={require("@/assets/images/uniportal.png")}
+              />
+            </View>
+            <View style={styles.button}>
+              <UsefulButton
+                to="https://courses.cs.ihu.gr/"
+                label="Courses"
+                image={require("@/assets/images/courses.png")}
+              />
+            </View>
+            <View style={styles.button}>
+              <UsefulButton
+                to="https://cs.duth.gr/cs_hosting/attachments/webpages/el_timetable.pdf"
+                label="Πρόγραμμα"
+                icon={faTable}
+              />
+            </View>
+            <View style={styles.button}>
+              <UsefulButton
+                to="https://cs.duth.gr/faculty.xhtml"
+                label="Προσωπικό"
+                icon={faChalkboardUser}
+              />
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -51,29 +80,25 @@ const styles = StyleSheet.create({
   container: {
     fontSize: 18,
     flex: 10,
-    // justifyContent: "space-around",
-    // alignContent: "center",
-    // paddingHorizontal: 10,
-    // margin: 10,
   },
-  buttonContainer: {
+  scrollContainer: {
     flex: 1,
-    // flexDirection: "row",
+  },
+  sectionContainer: {
+    flex: 1,
+    flexDirection: "row",
     flexWrap: "wrap",
-    // height: 150,
-    // justifyContent: "center",
-    // alignContent: "flex-start",
-    // paddingHorizontal: "10%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   button: {
-    // width: 150,
-    // height: 150,
-    // flex: 1,
-    // justifyContent: "flex-start",
-    // alignItems: "flex-start",
-    
-    alignSelf: "center",
-    marginHorizontal: 10,
-    marginVertical: 20,
-  }
+    marginTop: marginVertical,
+    marginBottom: marginVertical,
+    marginLeft: marginHorizontal,
+    marginRight: marginHorizontal,
+    width: width,
+    height: height,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });

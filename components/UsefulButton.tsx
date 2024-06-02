@@ -1,18 +1,34 @@
 import { Link } from "expo-router";
-import { Image, StyleSheet } from "react-native";
+import { Image, ImageSourcePropType, StyleSheet } from "react-native";
 import { Text, View } from "./Themed";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 type UsefulProps = {
   label: string;
   to: string;
+  image?: ImageSourcePropType;
+  icon?: IconDefinition;
 };
 
 export default function UsefulButton(props: UsefulProps) {
+  const render = () => {
+    if (props.icon === undefined && props.image !== undefined) {
+      return <Image source={props.image} resizeMode="contain" />;
+    }
+
+    if (props.icon !== undefined) {
+      return (
+        <FontAwesomeIcon icon={props.icon} style={styles.icon} size={105} />
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={[styles.boxShadow, styles.label]}>{props.label}</Text>
       <Link href={props.to} style={[styles.boxShadow, styles.button]}>
-        <Image source={require("@/assets/images/duth_light.png")} resizeMode="contain"/>
+        {render()}
       </Link>
     </View>
   );
@@ -51,5 +67,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginTop: 10,
     borderRadius: 11,
+  },
+  icon: {
+    padding: 10,
+    color: "#3D5475",
   },
 });

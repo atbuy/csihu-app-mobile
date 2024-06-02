@@ -61,6 +61,13 @@ export default function AnnouncementDetail() {
     getAnnouncement();
   }, []);
 
+  const externalLinkStyle = {
+    fontSize: 20,
+    textDecorationLine: "underline",
+    textDecorationStyle: "solid",
+    textDecorationColor: textColor.color,
+  };
+
   return (
     <View style={styles.body}>
       <Navbar />
@@ -77,7 +84,7 @@ export default function AnnouncementDetail() {
                 <View style={styles.headerContainer}>
                   <Link
                     href={`${process.env.ANNOUNCEMENT_BASE_URL}?id=${obj.id}`}
-                    style={[{ fontSize: 20 }, textColor]}
+                    style={[externalLinkStyle, textColor]}
                   >
                     Προβολή{" "}
                     <FontAwesomeIcon

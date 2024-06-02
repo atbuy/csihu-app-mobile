@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import { View } from "@/components/Themed";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Announcement = {
   pk: string;
@@ -21,11 +22,20 @@ export default function Announcements() {
   // Query API to get all announcements
   const getAnnouncements = async () => {
     try {
+      // Check if data is already cached
+      const cached = await AsyncStorage.getItem("announcementData");
+      if (cached !== null) {
+        setData(JSON.parse(cached));
+        setLoading(false);
+        return;
+      }
+
       const URL = `${process.env.API_BASE_URL}/csihu/notifications`;
 
       const response = await fetch(URL);
       const json = await response.json();
       setData(json.data);
+      await AsyncStorage.setItem("announcementData", JSON.stringify(json.data));
     } catch (error) {
       console.log(error);
     } finally {
