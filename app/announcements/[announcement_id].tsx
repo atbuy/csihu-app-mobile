@@ -59,7 +59,7 @@ export default function AnnouncementDetail() {
 
   useEffect(() => {
     getAnnouncement();
-  });
+  }, []);
 
   return (
     <View style={styles.body}>
