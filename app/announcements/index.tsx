@@ -1,9 +1,10 @@
 import Announcement from "@/components/Announcement";
 import Navbar from "@/components/Navbar";
 import { View } from "@/components/Themed";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AnnouncementListItem from "@/components/AnnouncementListItem";
 
 type Announcement = {
   pk: string;
@@ -18,9 +19,12 @@ type Announcement = {
 export default function Announcements() {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<Announcement[]>([]);
+  const [offset, setOffset] = useState(0);
+
+  const announcementAmount = 50;
 
   // Query API to get all announcements
-  const getAnnouncements = async () => {
+  const getAnnouncements = async (offset: number) => {
     try {
       // Check if data is already cached
       const cached = await AsyncStorage.getItem("announcementData");
@@ -42,11 +46,13 @@ export default function Announcements() {
         }
       }
 
-      const URL = `${process.env.API_BASE_URL}/csihu/notifications`;
+      const URL = `${process.env.API_BASE_URL}/csihu/notifications?amount=${announcementAmount}&offset=${offset}`;
 
       const response = await fetch(URL);
       const json = await response.json();
+
       setData(json.data);
+
       await AsyncStorage.setItem("announcementData", JSON.stringify(json.data));
       await AsyncStorage.setItem("lastCache", Date());
     } catch (error) {
@@ -56,41 +62,55 @@ export default function Announcements() {
     }
   };
 
-  const cropText = (text: string) => {
-    const STRING_LENGTH = 137;
-    const cleanText = text
-      .replaceAll("\n", "")
-      .replaceAll(".", ". ")
-      .replace(",", ", ")
-      .replaceAll(":", ": ")
-      .replaceAll(": //", "://");
-    return cleanText.substring(0, STRING_LENGTH) + "...";
-  };
-
   useEffect(() => {
-    getAnnouncements();
-  }, []);
+    getAnnouncements(offset);
+  }, [offset]);
+
+  const viewabilityConfigCallbackPairs = useRef([
+    {
+      viewabilityConfig: {
+        minimumViewTime: 500,
+        itemVisiblePercentThreshold: 50,
+      },
+      onViewableItemsChanged: ({ changed }) => {
+        changed.forEach((changedItem: any) => {
+          if (changedItem.isViewable) {
+            // console.log("++ Impression for: ", changedItem.item.id);
+          }
+        });
+      },
+    },
+  ]);
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <View style={styles.body}>
       <Navbar />
       <View style={styles.container}>
-        {isLoading ? (
-          <ActivityIndicator style={styles.spinner} />
-        ) : (
-          <ScrollView style={styles.announcementContainer}>
-            {data.map((obj) => (
-              <Announcement
-                key={obj.id}
-                id={obj.id}
-                title={obj.title}
-                description={cropText(obj.description)}
-                date={obj.date}
-                author={obj.author}
-              />
-            ))}
-          </ScrollView>
-        )}
+        <FlatList
+          data={data}
+          contentContainerStyle={{ gap: 10 }}
+          renderItem={({ item }) => (
+            <AnnouncementListItem announcement={item} />
+          )}
+          ListFooterComponent={() => isLoading && <ActivityIndicator />}
+          refreshing={isLoading}
+          onEndReached={() => {
+            setOffset(offset + announcementAmount);
+          }}
+          onEndReachedThreshold={3}
+          initialNumToRender={2}
+          viewabilityConfigCallbackPairs={
+            viewabilityConfigCallbackPairs.current
+          }
+          // getItemLayout={(data, index) = ({
+          //   length: itemHeight,
+          //   offset: (itemHeight + 5) * index,
+          //   index
+          // })}
+        />
       </View>
     </View>
   );
